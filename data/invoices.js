@@ -1,4 +1,4 @@
-[
+export const invoices = [
   {
     "customer": "BigCo",
     "performances": [

@@ -1,4 +1,4 @@
-{
+export const plays = {
   "hamlet": {
     "name": "Hamlet",
     "type": "tragedy"
