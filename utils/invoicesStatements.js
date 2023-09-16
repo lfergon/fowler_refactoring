@@ -1,5 +1,6 @@
 import {amountFor} from "./calculationInvoices.js";
 import {playFor} from "./playFor.js";
+import {volumeCreditsFor} from "./volumeCreditsFor.js";
 
 export function statement (invoice, plays) {
   let totalAmount = 0;
@@ -7,19 +8,12 @@ export function statement (invoice, plays) {
   let result = `Statement for ${invoice.customer}\n`;
   const format = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
 
-  for (let perf in invoice.performances) {
-    let thisAmount = amountFor(perf);
-
+  for (let perf of invoice.performances) {
     // add volume credits
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if ('comedy' === playFor(performance).type) {
-      volumeCredits += Math.floor(perf.audience / 5);
-    }
-
+    volumeCredits += volumeCreditsFor(perf);
     // print line for this order
-    result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
-    totalAmount += thisAmount;
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
+    totalAmount += amountFor(perf);
   }
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
