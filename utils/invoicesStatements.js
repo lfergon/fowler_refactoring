@@ -1,12 +1,12 @@
 import {amountFor} from "./calculationInvoices.js";
 import {playFor} from "./playFor.js";
 import {volumeCreditsFor} from "./volumeCreditsFor.js";
+import {format} from "./format.js";
 
 export function statement (invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
-  const format = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
 
   for (let perf of invoice.performances) {
     // add volume credits
