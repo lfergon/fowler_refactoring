@@ -15,5 +15,22 @@ export const invoices = [
         "audience": 40
       }
     ]
+  },
+  {
+    "customer": "SmallCo",
+    "performances": [
+      {
+        "playID": "hamlet",
+        "audience": 50
+      },
+      {
+        "playID": "as-like",
+        "audience": 30
+      },
+      {
+        "playID": "othello",
+        "audience": 20
+      }
+    ]
   }
 ]

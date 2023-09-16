@@ -1,53 +1,7 @@
-import {invoices} from "./data/invoices.js";
-import {plays} from "./data/plays.js";
+import { invoices } from "./data/invoices.js";
+import { plays } from "./data/plays.js";
+import { statement } from "./utils/invoicesStatements.js";
 
-function amountFor(performance, playType) {
-  let result = 0;
-  const performanceAudience = performance.audience;
-  switch (playType) {
-    case 'tragedy':
-      result = 40000;
-      if (performanceAudience > 30) {
-        result += 1000 * (performanceAudience - 30);
-      }
-      break;
-    case "comedy":
-      result = 30000;
-      if (performance.audience > 20) {
-        result += 10000 + 500 * (performanceAudience - 20);
-      }
-      result += 300 * performanceAudience;
-      break;
-    default:
-      throw new Error(`unknown type: ${playType}`);
-  }
-  return result;
-}
-
-function statement (invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
-  const format = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format;
-
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
-    let thisAmount = amountFor(perf, play.type);
-
-    // add volume credits
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if ('comedy' === play.type) {
-      volumeCredits += Math.floor(perf.audience / 5);
-    }
-
-    // print line for this order
-    result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
-    totalAmount += thisAmount;
-  }
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
-  result += `You earned ${volumeCredits} credits\n`;
-  return result;
-}
-
-statement(invoices[0], plays);
+invoices.forEach(invoice => {
+  statement(invoice, plays);
+});
